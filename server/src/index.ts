@@ -3,7 +3,7 @@ import express = require("express");
 import cookieParser = require("cookie-parser");
 // import EventEmitter = require("events");
 import { connection } from "./data-source";
-import { APIResponse } from "./util";
+import { APIResponse, APIRequest } from "./util";
 import * as endpoints from "./api";
 import * as auth from "./auth";
 
@@ -19,7 +19,7 @@ api.use(cookieParser());
 function checkDB(
   req: express.Request,
   res: express.Response,
-  next: express.NextFunction
+  next: express.NextFunction,
 ) {
   res.header({
     "Content-Type": "application/json",
@@ -60,30 +60,30 @@ api.options("*", (req, res) => {
 // Listen for each individual api endpoint
 endpoints.list.forEach((endpoint) => {
   api.get(`/${endpoint}`, (req, res, next) => {
-    auth.checkPermsAndExecute(endpoints[endpoint], req.query, req, res, next);
+    auth.checkPermsAndExecute(endpoints[endpoint], req.query, req as APIRequest, res, next);
   });
   api.post(`/${endpoint}`, (req, res, next) => {
-    auth.checkPermsAndExecute(endpoints[endpoint], req.body, req, res, next);
+    auth.checkPermsAndExecute(endpoints[endpoint], req.body, req as APIRequest, res, next);
   });
   api.get(`/api/${endpoint}`, (req, res, next) => {
-    auth.checkPermsAndExecute(endpoints[endpoint], req.query, req, res, next);
+    auth.checkPermsAndExecute(endpoints[endpoint], req.query, req as APIRequest, res, next);
   });
   api.post(`/api/${endpoint}`, (req, res, next) => {
-    auth.checkPermsAndExecute(endpoints[endpoint], req.body, req, res, next);
+    auth.checkPermsAndExecute(endpoints[endpoint], req.body, req as APIRequest, res, next);
   });
 });
 auth.list.forEach((endpoint) => {
   api.get(`/${endpoint}`, (req, res, next) => {
-    auth.checkPermsAndExecute(auth[endpoint], req.query, req, res, next);
+    auth.checkPermsAndExecute(auth[endpoint], req.query, req as APIRequest, res, next);
   });
   api.post(`/${endpoint}`, (req, res, next) => {
-    auth.checkPermsAndExecute(auth[endpoint], req.body, req, res, next);
+    auth.checkPermsAndExecute(auth[endpoint], req.body, req as APIRequest, res, next);
   });
   api.get(`/api/${endpoint}`, (req, res, next) => {
-    auth.checkPermsAndExecute(auth[endpoint], req.query, req, res, next);
+    auth.checkPermsAndExecute(auth[endpoint], req.query, req as APIRequest, res, next);
   });
   api.post(`/api/${endpoint}`, (req, res, next) => {
-    auth.checkPermsAndExecute(auth[endpoint], req.body, req, res, next);
+    auth.checkPermsAndExecute(auth[endpoint], req.body, req as APIRequest, res, next);
   });
 });
 
@@ -100,9 +100,9 @@ function combinedApi(
       typeof params.module === "string" ? params.module : params.module[0];
   }
   if (endpoints.list.includes(module)) {
-    auth.checkPermsAndExecute(endpoints[module], params, req, res, next);
+    auth.checkPermsAndExecute(endpoints[module], params, req as APIRequest, res, next);
   } else if (auth.list.includes(module)) {
-    auth.checkPermsAndExecute(auth[module], params, req, res, next);
+    auth.checkPermsAndExecute(auth[module], params, req as APIRequest, res, next);
   }
   {
     res.send({

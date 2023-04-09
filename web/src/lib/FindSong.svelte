@@ -169,6 +169,9 @@
       <input class="song-metadata-filter" type="number" name="page" min="1" placeholder="Page (1)" bind:value="{searchParams.page}">
     </div>
   </form>
+  <div>
+    <span style="color: #a895ec;">Light purple</span> text means variable tempo or variable time signature.
+  </div>
   <div id="search-error-message" />
   <div id="search-results">
     {#if foundTotal}
@@ -224,8 +227,8 @@
             <td class="song-name">{song.name ?? ''}</td>
             <td class="song-translated-name">{song.translatedName ?? ''}</td>
             <td class="song-key">{song.key?.length ? song.key.join(" | ") : ''}</td>
-            <td class="song-tempo">{song.tempo?.length ? song.tempo.join(" | ") : ''}</td>
-            <td class="song-time">{song.time?.length ? song.time.join(" | ") : ''}</td>
+            <td class="song-tempo {song.variableTempo ? "variable-tempo" : ""}">{song.tempo?.length ? song.tempo.join(" | ") : ''}</td>
+            <td class="song-time {song.variableTime ? "variable-time" : ""}">{song.time?.length ? song.time.join(" | ") : ''}</td>
           </tr>
         {/each}
       </table>
@@ -255,6 +258,9 @@
       &::placeholder {
         color: var(--light-soft-text-color);
       }
+    }
+    #search-results .page-btn.active {
+      color: var(--light-text-color);
     }
   }
   #search-bar {
@@ -360,6 +366,10 @@
       &.song-name{
         width: 250px;
       }
+    }
+    td.variable-tempo,
+    td.variable-time {
+      color: #a895ec;
     }
     th {
       cursor: pointer;

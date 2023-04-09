@@ -1,12 +1,12 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import { connection } from "../data-source";
-import { User, Session } from "../entity";
-import { APIResponse, APIError, HandlerFunction } from "../util";
+import { Session } from "../entity";
+import { APIResponse, APIError, APIRequest, HandlerFunction } from "../util";
 
 export default async function checkPermsAndExecute(
   handler: HandlerFunction,
   params: any,
-  req: Request,
+  req: APIRequest,
   res: Response,
   next: NextFunction
 ) {
@@ -18,11 +18,15 @@ export default async function checkPermsAndExecute(
       // Endpoint requires user to be logged in.
       let sessionId = req.cookies?.mustemmer_session_id;
       if (sessionId) {
-        let session = await connection.manager.findOneBy(Session, {
-          id: sessionId,
+        let session = await connection.manager.findOne(Session, {
+          relations: ["user"],
+          where: { id: sessionId },
         });
         if (!session || session.userAgent !== req.headers["user-agent"])
           throw new APIError("E_NO_PERMS", "Permission denied.");
+
+        /* Save logged in user for later use */
+        req.user = session.user;
       } else throw new APIError("E_NO_PERMS", "Permission denied.");
     }
 

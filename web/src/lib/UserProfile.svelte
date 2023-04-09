@@ -1,19 +1,26 @@
 <script context="module" lang="ts">
+  import { writable } from "svelte/store";
+  const loggedIn = writable(false);
+  let username: string = "";
   export async function updateUserProfile(dbRoot: string) {
     let session = document.cookie.split(";").find(v=>v.startsWith("mustemmer_session_id="));
-    let userProfile = document.getElementById("user-profile") as HTMLDivElement;
+    // let userProfile = document.getElementById("user-profile-name") as HTMLSpanElement;
     if (session) {
       let res = await fetch(dbRoot+"/getUser", {
         method: "POST",
         mode: "cors",
         credentials: "include",
-      })
+      });
       let data = await res.json();
       if (data.status === "ok") {
         if (data.data.sessionValid) {
-          userProfile.innerText = `Logged in as ${data.data.username}`;
+          loggedIn.set(true);
+          username = `Logged in as ${data.data.username}`;
           return true;
-        } else return false;
+        } else {
+          loggedIn.set(false);
+          return false;
+        }
       } else {
         console.log(data.message);
         return undefined;
@@ -25,14 +32,43 @@
 <script lang="ts">
   export let dbRoot: string;
   import { onMount } from "svelte";
-  import { showLoginModal } from "./showLoginModal";
+  import { showLoginModal, showSignupModal } from "./showModal";
+  import UserProfileMenu from "./UserProfileMenu.svelte";
   async function checkLogin() { 
     let result = await updateUserProfile(dbRoot);
     if (result === false) showLoginModal.set(true);
+  }
+  async function checkSignup() { 
+    let result = await updateUserProfile(dbRoot);
+    if (result === false) showSignupModal.set(true);
+  }
+  async function logout() {
+    let res = await fetch(dbRoot+"/logout", {
+      method: "POST",
+      mode: "cors",
+      credentials: "include",
+    });
+    let data = await res.json();
+    if (data.status === "ok") {
+      loggedIn.set(false);
+      await updateUserProfile(dbRoot);
+    }
   }
   onMount(()=>updateUserProfile(dbRoot));
 </script>
 
 <div id="user-profile">
-  <span on:click={checkLogin}>Login</span>
+  {#if $loggedIn}
+    <UserProfileMenu username={username} logout={logout} />
+  {:else}
+    <span class="clickable" on:click={checkLogin}>Login</span>
+    or
+    <span class="clickable" on:click={checkSignup}>Sign up</span>
+  {/if}
 </div>
+
+<style>
+  .clickable {
+    cursor: pointer;
+  }
+</style>

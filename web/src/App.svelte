@@ -3,9 +3,10 @@
   import UserProfile, { updateUserProfile } from './lib/UserProfile.svelte';
   import FindSong from './lib/FindSong.svelte';
   import AddSong from './lib/AddSong.svelte';
-  import { showLoginModal } from "./lib/showLoginModal";
+  import { showLoginModal, showSignupModal, showInviteModal } from "./lib/showModal";
   let dbRoot = "/api";
 </script>
+
 <main>
   <div class="user-profile-container">
     <UserProfile dbRoot={dbRoot} on:mount={()=>updateUserProfile(dbRoot)} />
@@ -22,6 +23,18 @@
 
   {#if $showLoginModal}
     {#await import('./lib/LoginModal.svelte') then value }
+      <svelte:component this={value.default} dbRoot={dbRoot}/>
+    {/await}
+  {/if}
+
+  {#if $showSignupModal}
+    {#await import('./lib/SignupModal.svelte') then value }
+      <svelte:component this={value.default} dbRoot={dbRoot}/>
+    {/await}
+  {/if}
+
+  {#if $showInviteModal}
+    {#await import('./lib/InviteModal.svelte') then value }
       <svelte:component this={value.default} dbRoot={dbRoot}/>
     {/await}
   {/if}

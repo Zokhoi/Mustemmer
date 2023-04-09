@@ -2,7 +2,7 @@
   export let dbRoot: string;
   let newSongs: any[] = [{}];
 
-  import { showLoginModal } from "./showLoginModal";
+  import { showLoginModal } from "./showModal";
   function addRow(index: number) {
     newSongs.splice(index, 0, {});
     newSongs = newSongs; // force rerender
@@ -21,6 +21,14 @@
           if (newSongs[i].key) normalizedSong.key = newSongs[i].key.split("|").map(v=>v.trim());
           if (newSongs[i].tempo) normalizedSong.tempo = newSongs[i].tempo.split("|").map(v=>v.trim());
           if (newSongs[i].time) normalizedSong.time = newSongs[i].time.split("|").map(v=>v.trim());
+          if (normalizedSong.tempo.some(v=>v.startsWith("~"))) {
+            normalizedSong.variableTempo = true;
+            normalizedSong.tempo = normalizedSong.tempo.map(v=>v.replace(/~+/g, ""));
+          }
+          if (normalizedSong.time.some(v=>v.startsWith("~"))) {
+            normalizedSong.variableTime = true;
+            normalizedSong.time = normalizedSong.time.map(v=>v.replace(/~+/g, ""));
+          }
           normalized.push(normalizedSong);
         }
       }

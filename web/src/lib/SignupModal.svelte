@@ -1,20 +1,24 @@
 <script lang="ts">
   export let dbRoot: string;
   import { onMount, onDestroy } from "svelte";
-  import { showLoginModal } from "./showModal";
+  import { showSignupModal } from "./showModal";
   import { updateUserProfile } from "./UserProfile.svelte";
   function containerExitPrompt(e: Event) {
-    if ((e.target as HTMLElement).classList.contains("modal-container")) showLoginModal.set(false);
+    if ((e.target as HTMLElement).classList.contains("modal-container")) showSignupModal.set(false);
   }
-  async function loginForm(event: any) {
+  async function signupForm(event: any) {
     let form = event.target as HTMLFormElement;
     let obj: any = {};
+    let pw = document.getElementById("upw"), pw2 = document.getElementById("upw2");
+    if (pw.value!==pw2.value) {
+      document.getElementById("signup-message").innerText = "Passwords don't match."
+    }
     for (let i of Object.keys(form.elements)) {
       if (form.elements[i].type !== "submit") {
         obj[form.elements[i].name] = form.elements[i].value
       }
     }
-    let res = await fetch(dbRoot+'/login', {
+    let res = await fetch(dbRoot+'/createUser', {
       method: "POST",
       body: JSON.stringify(obj),
       mode: "cors",
@@ -23,17 +27,17 @@
         "Content-Type": "application/json",
       },
       credentials: "include",
-    });
+    })
     let jsonres = await res.json();
     if (jsonres.status!=='ok') {
-      document.getElementById("login-message").innerText = jsonres.message;
+      document.getElementById("signup-message").innerText = jsonres.message;
     } else {
-      showLoginModal.set(false);
-      await updateUserProfile(dbRoot);
+      showSignupModal.set(false);
+      updateUserProfile(dbRoot);
     }
   }
   const escKeydown = e => {
-    if (e.code.toLowerCase() == "escape") showLoginModal.set(false);
+    if (e.code.toLowerCase() == "escape") showSignupModal.set(false);
   }
   onMount(()=>{
     window.addEventListener("keydown", escKeydown);
@@ -44,18 +48,24 @@
 </script>
 
 <div class="modal-container" on:click={containerExitPrompt}>
-  <div class="modal login-modal">
-    <h2>Login to Mustemmer DB</h2>
-    <form on:submit|preventDefault={loginForm}>
+  <div class="modal signup-modal">
+    <h2>Sign up for Mustemmer DB</h2>
+    <form on:submit|preventDefault={signupForm}>
       <label for="uname">Username:</label>
       <input type="text" id="uname" name="username" placeholder="Username" />
       <br />
       <label for="upw">Password:</label>
       <input type="password" id="upw" name="password" placeholder="Password" />
       <br />
-      <button type="submit">Login</button>
+      <label for="upw2">Reconfirm password:</label>
+      <input type="password" id="upw2" name="password" placeholder="Reconfirm password" />
+      <br />
+      <label for="uinv">Invite code:</label>
+      <input type="text" id="uinv" name="invite" placeholder="Invite code" />
+      <br />
+      <button type="submit">Sign up</button>
     </form>
-    <div id="login-message" />
+    <div id="signup-message" />
   </div>
 </div>
 

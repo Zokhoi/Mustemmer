@@ -2,6 +2,7 @@ import { resolve } from "path";
 import { readFileSync } from "fs";
 import * as yaml from "js-yaml";
 import { Request, Response, NextFunction } from "express";
+import { User } from "./entity"
 
 export const config: any = yaml.load(
   readFileSync(resolve(__dirname, "../config.yaml"), "utf8")
@@ -16,6 +17,10 @@ export interface APIResponse {
 
 export interface APIError extends Error {
   status: string;
+}
+
+export interface APIRequest extends Request {
+  user: User,
 }
 
 export class APIError extends Error implements APIError {

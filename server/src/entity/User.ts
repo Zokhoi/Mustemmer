@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
 import { createHash, randomBytes } from "crypto";
-import { Session } from ".";
+import { Session, Invite } from ".";
 
 @Entity()
 export class User {
@@ -19,8 +19,14 @@ export class User {
   @Column({ nullable: true })
   token: string;
 
-  @OneToMany(() => Session, (session) => session.user)
+  @OneToMany(() => Session, session => session.user)
   activeSessions: Session[];
+
+  @Column({ default: false })
+  canGenerateInvite: boolean;
+
+  @OneToMany(() => Invite, invite => invite.owner)
+  invites: Invite[];
 
   checkPW(password: string) {
     let hash = createHash("sha512")
@@ -30,7 +36,7 @@ export class User {
     return hash === this.hashedPassword;
   }
 
-  static from(params: { username: string; password: string }) {
+  static from(params: { username: string; password: string, canGenerateInvite?: boolean }) {
     let user = new User();
     let salt = randomBytes(32).toString("base64");
     let hash = createHash("sha512")
@@ -40,6 +46,7 @@ export class User {
     user.username = params.username;
     user.salt = salt;
     user.hashedPassword = hash;
+    user.canGenerateInvite = !!params.canGenerateInvite;
     return user;
   }
 }
