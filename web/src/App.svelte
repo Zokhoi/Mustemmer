@@ -3,7 +3,7 @@
   import UserProfile, { updateUserProfile } from './lib/UserProfile.svelte';
   import FindSong from './lib/FindSong.svelte';
   import AddSong from './lib/AddSong.svelte';
-  import { showLoginModal, showSignupModal, showInviteModal } from "./lib/showModal";
+  import { showLoginModal, showSignupModal, showInviteModal, showTokenModal } from "./lib/showModal";
   let dbRoot = "/api";
 </script>
 
@@ -35,6 +35,12 @@
 
   {#if $showInviteModal}
     {#await import('./lib/InviteModal.svelte') then value }
+      <svelte:component this={value.default} dbRoot={dbRoot}/>
+    {/await}
+  {/if}
+
+  {#if $showTokenModal}
+    {#await import('./lib/TokenModal.svelte') then value }
       <svelte:component this={value.default} dbRoot={dbRoot}/>
     {/await}
   {/if}

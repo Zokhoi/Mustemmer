@@ -5,5 +5,6 @@ export * from "./createUser";
 export * from "./getUser";
 export * from "./updatePassword";
 export * from "./generateInvite";
+export * from "./generateToken";
 export * from "./deleteUser";
-export const list = ["login", "logout", "createUser", "getUser", "updatePassword", "generateInvite", "deleteUser"];
+export const list = ["login", "logout", "createUser", "getUser", "updatePassword", "generateInvite", "generateToken", "deleteUser"];

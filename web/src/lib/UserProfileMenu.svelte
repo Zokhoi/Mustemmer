@@ -1,13 +1,16 @@
 <script lang="ts">
   export let username: string;
   export let logout: function;
-  import { showInviteModal } from "./showModal";
+  import { showInviteModal, showTokenModal } from "./showModal";
   let menuShown = false;
   async function toggleMenu() {
     menuShown = !menuShown;
   }
-  async function showModal() {
+  async function showInviteModalFunc() {
     showInviteModal.set(true);
+  }
+  async function showTokenModalFunc() {
+    showTokenModal.set(true);
   }
 </script>
 
@@ -18,8 +21,13 @@
   <div class="menu-content">
     <ul>
       <li>
-        <span class="clickable" on:click={showModal}>
+        <span class="clickable" on:click={showInviteModalFunc}>
           Create invite link
+        </span>
+      </li>
+      <li>
+        <span class="clickable" on:click={showTokenModalFunc}>
+          Generate token
         </span>
       </li>
       <li>
