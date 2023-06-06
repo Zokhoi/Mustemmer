@@ -75,14 +75,14 @@
   }
   .modal {
     display: inline-block;
-    background-color: #8993ca;
-    border: 2px solid #6272ce;
+    background-color: var(--light-accent-2);
+    border: 2px solid var(--dark-accent-2);
     border-radius: 10px;
     width: 30%;
     padding: 10px;
     margin: 40vh auto;
     text-align: center;
-    color: var(--light-text-color);
+    color: var(--light-bg-text-color);
   }
   .modal h2 {
     margin-top: 0;

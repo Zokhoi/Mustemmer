@@ -245,22 +245,22 @@
   @media (prefers-color-scheme: dark) {
     #search-bar input {
       background-color: var(--dark-bg);
-      color: var(--dark-text-color);
+      color: var(--dark-bg-text-color);
       &::placeholder {
-        color: var(--dark-softer-text-color);
+        color: var(--dark-softer-bg-text-color);
       }
     }
   }
   @media (prefers-color-scheme: light) {
     #search-bar input {
       background-color: var(--light-bg);
-      color: var(--light-text-color);
+      color: var(--light-bg-text-color);
       &::placeholder {
-        color: var(--light-soft-text-color);
+        color: var(--light-bg-soft-bg-text-color);
       }
     }
     #search-results .page-btn.active {
-      color: var(--light-text-color);
+      color: var(--light-bg-text-color);
     }
   }
   #search-bar {
@@ -274,7 +274,7 @@
       padding: 0.375em 1.5em;
       font-size: 1.25em;
       width: 45%;
-      border: 2.5px solid #775bf5;
+      border: 2.5px solid var(--light-accent);
       border-radius: 10px;
       box-shadow: none;
     }
@@ -290,21 +290,21 @@
   #song-search:focus,
   .search-btn:focus-visible,
   .search-btn:focus {
-    outline: 2px solid #775bf5;
+    outline: 2px solid var(--light-accent);
   }
   .search-btn {
     display: inline-block;
     color: #FFF;
-    background-color: #775bf5;
+    background-color: var(--light-accent);
     text-shadow: none;
     padding: 0.375em 1.5em;
     font-size: 1.25em;
-    border: 2px solid #775bf5;
+    border: 2px solid var(--light-accent);
     border-radius: 10px;
     user-select: none;
 
     &:hover {
-      background-color: #6544f8;
+      background-color: var(--dark-accent);
       cursor: pointer;
     }
   }
@@ -319,7 +319,7 @@
     .page-btn {
       display: inline-block;
       color: #FFF;
-      background-color: #775bf5;
+      background-color: var(--light-accent);
       border: none;
       border-radius: 5px;
       padding: 0.375em 1.5em;
@@ -328,18 +328,18 @@
       user-select: none;
 
       &:hover {
-        background-color: #6544f8;
+        background-color: var(--dark-accent);
       }
 
       &.active {
         background-color: transparent;
-        border: 2px solid #775bf5;
+        border: 2px solid var(--light-accent);
         padding: calc(0.375em - 2px) calc(1.5em - 2px);
       }
 
       &.active:hover {
         background-color: transparent;
-        border: 2px solid #6544f8;
+        border: 2px solid var(--dark-accent);
       }
     }
   }

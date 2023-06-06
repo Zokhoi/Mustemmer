@@ -45,25 +45,36 @@
   @media (prefers-color-scheme: dark) {
     :root {
       background-color: var(--dark-bg);
-      color: var(--dark-text-color);
+      color: var(--dark-bg-text-color);
+    }
+    h1 {
+      color: var(--light-accent);
     }
   }
   @media (prefers-color-scheme: light) {
     :root {
       background-color: var(--light-bg);
-      color: var(--light-text-color);
+      color: var(--light-bg-text-color);
+    }
+    h1 {
+      color: var(--dark-accent);
     }
   }
   :root {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     --light-bg: #EEE;
-    --light-text-color: #111;
-    --light-soft-text-color: #111A;
+    --light-bg-text-color: #111;
+    --light-bg-soft-bg-text-color: #111A;
 
     --dark-bg: #333;
-    --dark-text-color: #CCC;
-    --dark-soft-text-color: #CCCA;
+    --dark-bg-text-color: #CCC;
+    --dark-bg-soft-bg-text-color: #CCCA;
+
+    --light-accent: #775bf5;
+    --light-accent-2: #8993ca;
+    --dark-accent: #6544f8;
+    --dark-accent-2: #6272ce;
   }
 
   main {
@@ -83,7 +94,7 @@
   } */
 
   h1 {
-    color: #6544f8;
+    color: var(--dark-accent);
     text-transform: uppercase;
     font-size: 4rem;
     font-weight: 100;

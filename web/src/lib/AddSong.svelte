@@ -128,30 +128,30 @@
   .add-song-btn,
   .add-song-reset-btn {
     color: #FFF;
-    background-color: #775bf5;
+    background-color: var(--light-accent);
     border: none;
     border-radius: 5px;
     padding: 0.375em 1.5em;
 
     &:hover {
-      background-color: #6544f8;
+      background-color: var(--dark-accent);
     }
   }
   @media (prefers-color-scheme: dark) {
     #add-song-table input {
       background-color: var(--dark-bg);
-      color: var(--dark-text-color);
+      color: var(--dark-bg-text-color);
       &::placeholder {
-        color: var(--dark-text-color);
+        color: var(--dark-bg-text-color);
       }
     }
   }
   @media (prefers-color-scheme: light) {
     #add-song-table input {
       background-color: var(--light-bg);
-      color: var(--light-text-color);
+      color: var(--light-bg-text-color);
       &::placeholder {
-        color: var(--light-text-color);
+        color: var(--light-bg-text-color);
       }
     }
   }
