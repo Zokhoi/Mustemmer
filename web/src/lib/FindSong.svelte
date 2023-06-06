@@ -1,5 +1,6 @@
 <script lang="ts">
   export let dbRoot: string;
+  import { onMount } from "svelte";
   let searchParams: any = {
     keyShiftType: "semitone",
   };
@@ -141,6 +142,7 @@
     }
     foundSongs = foundSongs;
   }
+  onMount(async()=>{search()});
 </script>
 
 <div id="search-content">

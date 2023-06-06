@@ -32,7 +32,7 @@
 </div>
 
 <style>
-  .clickable {
+  .clickable, .clickable:hover {
     cursor: pointer;
   }
   .menu-container {

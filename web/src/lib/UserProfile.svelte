@@ -68,7 +68,7 @@
 </div>
 
 <style>
-  .clickable {
+  .clickable, .clickable:hover {
     cursor: pointer;
   }
 </style>

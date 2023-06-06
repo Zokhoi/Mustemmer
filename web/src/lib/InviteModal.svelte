@@ -1,8 +1,10 @@
 <script lang="ts">
   export let dbRoot: string;
   import { onMount, onDestroy } from "svelte";
+  import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
+  import { faCopy, faSquareCheck } from "@fortawesome/free-regular-svg-icons";
   import { showInviteModal } from "./showModal";
-  let infiniteUse = false, neverExpire = true;
+  let infiniteUse = false, neverExpire = true, invite = null, copied = false;
   function containerExitPrompt(e: Event) {
     if ((e.target as HTMLElement).classList.contains("modal-container")) showInviteModal.set(false);
   }
@@ -24,8 +26,13 @@
     });
     let jsonres = await res.json();
     if (jsonres.status==='ok') {
-      document.getElementById("invite-message").innerText = `Invite code: ${jsonres.data.code}`;
+      invite = jsonres.data.code;
+      copied = false;
     }
+  }
+  async function copyInvite(e: Event) {
+    navigator.clipboard.writeText(invite);
+    copied = true;
   }
   const escKeydown = e => {
     if (e.code.toLowerCase() == "escape") showInviteModal.set(false);
@@ -56,12 +63,26 @@
       <br />
       <button type="submit">Generate invite</button>
     </form>
-    <div id="invite-message" />
+    {#if invite}
+      <div id="invite-message">
+        Invite code: {invite}
+        <span id="copy-icon" class="clickable" on:click={copyInvite}>
+          {#if copied}
+            <FontAwesomeIcon icon={faSquareCheck} size="1x" />
+          {:else}
+            <FontAwesomeIcon icon={faCopy} size="1x" />
+          {/if}
+        </span>
+      </div>
+    {/if}
   </div>
 </div>
 
 
 <style>
+  .clickable, .clickable:hover {
+    cursor: pointer;
+  }
   .modal-container {
     background-color: #57575788;
     position: fixed;
