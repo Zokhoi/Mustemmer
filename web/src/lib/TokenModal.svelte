@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let dbRoot: string;
+  import { dbRoot } from "./constants";
   import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
   import { faCopy, faSquareCheck } from "@fortawesome/free-regular-svg-icons";
   import BaseModal from "./BaseModal.svelte";

@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let dbRoot: string;
+  import { dbRoot } from "./constants";
   import BaseModal from "./BaseModal.svelte";
   import { showSignupModal } from "./showModal";
   import { updateUserProfile } from "./UserProfile.svelte";
@@ -29,7 +29,7 @@
       document.getElementById("signup-message").innerText = res.message;
     } else {
       showSignupModal.set(false);
-      updateUserProfile(dbRoot);
+      updateUserProfile();
     }
   }
 </script>

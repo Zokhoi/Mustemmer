@@ -3,19 +3,23 @@
   import UserProfile, { updateUserProfile } from './lib/UserProfile.svelte';
   import FindSong from './lib/FindSong.svelte';
   import AddSong from './lib/AddSong.svelte';
-  import { showLoginModal, showSignupModal, showInviteModal, showTokenModal } from "./lib/showModal";
-  let dbRoot = "/api";
+  import {
+    showLoginModal,
+    showSignupModal,
+    showInviteModal,
+    showTokenModal,
+  } from "./lib/showModal";
 </script>
 
 <main>
   <div class="user-profile-container">
-    <UserProfile dbRoot={dbRoot} on:mount={()=>updateUserProfile(dbRoot)} />
+    <UserProfile on:mount={()=>updateUserProfile()} />
   </div>
   
   <h1>Mustemmer</h1>
 
-  <FindSong dbRoot={dbRoot} />
-  <AddSong dbRoot={dbRoot} />
+  <FindSong />
+  <AddSong />
 
   <p>
     Created by <a href="https://github.com/Qrael" target="_blank">Qrael</a>
@@ -23,25 +27,25 @@
 
   {#if $showLoginModal}
     {#await import('./lib/LoginModal.svelte') then value }
-      <svelte:component this={value.default} dbRoot={dbRoot}/>
+      <svelte:component this={value.default} />
     {/await}
   {/if}
 
   {#if $showSignupModal}
     {#await import('./lib/SignupModal.svelte') then value }
-      <svelte:component this={value.default} dbRoot={dbRoot}/>
+      <svelte:component this={value.default} />
     {/await}
   {/if}
 
   {#if $showInviteModal}
     {#await import('./lib/InviteModal.svelte') then value }
-      <svelte:component this={value.default} dbRoot={dbRoot}/>
+      <svelte:component this={value.default} />
     {/await}
   {/if}
 
   {#if $showTokenModal}
     {#await import('./lib/TokenModal.svelte') then value }
-      <svelte:component this={value.default} dbRoot={dbRoot}/>
+      <svelte:component this={value.default} />
     {/await}
   {/if}
   

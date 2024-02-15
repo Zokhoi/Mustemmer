@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let dbRoot: string;
+  import { dbRoot } from "./constants";
   import BaseModal from "./BaseModal.svelte";
   import { showLoginModal } from "./showModal";
   import { updateUserProfile } from "./UserProfile.svelte";
@@ -25,7 +25,7 @@
       document.getElementById("login-message").innerText = res.message;
     } else {
       showLoginModal.set(false);
-      await updateUserProfile(dbRoot);
+      await updateUserProfile();
     }
   }
 </script>

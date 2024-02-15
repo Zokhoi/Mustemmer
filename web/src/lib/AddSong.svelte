@@ -1,8 +1,9 @@
 <script lang="ts">
-  export let dbRoot: string;
   let newSongs: any[] = [{}];
-
+  
+  import { dbRoot } from "./constants";
   import { showLoginModal } from "./showModal";
+
   function addRow(index: number) {
     newSongs.splice(index, 0, {});
     newSongs = newSongs; // force rerender

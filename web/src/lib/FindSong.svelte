@@ -1,6 +1,6 @@
 <script lang="ts">
-  export let dbRoot: string;
   import { onMount } from "svelte";
+  import { dbRoot } from "./constants";
   let searchParams: any = {
     keyShiftType: "semitone",
   };
