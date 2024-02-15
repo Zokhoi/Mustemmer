@@ -1,11 +1,8 @@
 <script lang="ts">
   export let dbRoot: string;
-  import { onMount, onDestroy } from "svelte";
+  import BaseModal from "./BaseModal.svelte";
   import { showSignupModal } from "./showModal";
   import { updateUserProfile } from "./UserProfile.svelte";
-  function containerExitPrompt(e: Event) {
-    if ((e.target as HTMLElement).classList.contains("modal-container")) showSignupModal.set(false);
-  }
   async function signupForm(event: any) {
     let form = event.target as HTMLFormElement;
     let obj: any = {};
@@ -27,73 +24,36 @@
         "Content-Type": "application/json",
       },
       credentials: "include",
-    })
-    let jsonres = await res.json();
-    if (jsonres.status!=='ok') {
-      document.getElementById("signup-message").innerText = jsonres.message;
+    }).then(res=>res.json());
+    if (res.status==='ok') {
+      document.getElementById("signup-message").innerText = res.message;
     } else {
       showSignupModal.set(false);
       updateUserProfile(dbRoot);
     }
   }
-  const escKeydown = e => {
-    if (e.code.toLowerCase() == "escape") showSignupModal.set(false);
-  }
-  onMount(()=>{
-    window.addEventListener("keydown", escKeydown);
-  });
-  onDestroy(()=>{
-    window.removeEventListener("keydown", escKeydown);
-  });
 </script>
 
-<div class="modal-container" on:click={containerExitPrompt}>
-  <div class="modal signup-modal">
-    <h2>Sign up for Mustemmer DB</h2>
-    <form on:submit|preventDefault={signupForm}>
-      <label for="uname">Username:</label>
-      <input type="text" id="uname" name="username" placeholder="Username" />
-      <br />
-      <label for="upw">Password:</label>
-      <input type="password" id="upw" name="password" placeholder="Password" />
-      <br />
-      <label for="upw2">Reconfirm password:</label>
-      <input type="password" id="upw2" name="password" placeholder="Reconfirm password" />
-      <br />
-      <label for="uinv">Invite code:</label>
-      <input type="text" id="uinv" name="invite" placeholder="Invite code" />
-      <br />
-      <button type="submit">Sign up</button>
-    </form>
-    <div id="signup-message" />
-  </div>
-</div>
+<BaseModal modalClass="signup-modal" showModal={showSignupModal}>
+  <h2>Sign up for Mustemmer DB</h2>
+  <form on:submit|preventDefault={signupForm}>
+    <label for="uname">Username:</label>
+    <input type="text" id="uname" name="username" placeholder="Username" />
+    <br />
+    <label for="upw">Password:</label>
+    <input type="password" id="upw" name="password" placeholder="Password" />
+    <br />
+    <label for="upw2">Reconfirm password:</label>
+    <input type="password" id="upw2" name="password" placeholder="Reconfirm password" />
+    <br />
+    <label for="uinv">Invite code:</label>
+    <input type="text" id="uinv" name="invite" placeholder="Invite code" />
+    <br />
+    <button type="submit">Sign up</button>
+  </form>
+  <div id="signup-message" />
+</BaseModal>
 
 
 <style>
-  .modal-container {
-    background-color: #57575788;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-  }
-  .modal {
-    display: inline-block;
-    background-color: var(--light-accent-2);
-    border: 2px solid var(--dark-accent-2);
-    border-radius: 10px;
-    width: 30%;
-    padding: 10px;
-    margin: 40vh auto;
-    text-align: center;
-    color: var(--light-bg-text-color);
-  }
-  .modal h2 {
-    margin-top: 0;
-  }
 </style>

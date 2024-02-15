@@ -1,11 +1,8 @@
 <script lang="ts">
   export let dbRoot: string;
-  import { onMount, onDestroy } from "svelte";
+  import BaseModal from "./BaseModal.svelte";
   import { showLoginModal } from "./showModal";
   import { updateUserProfile } from "./UserProfile.svelte";
-  function containerExitPrompt(e: Event) {
-    if ((e.target as HTMLElement).classList.contains("modal-container")) showLoginModal.set(false);
-  }
   async function loginForm(event: any) {
     let form = event.target as HTMLFormElement;
     let obj: any = {};
@@ -23,67 +20,30 @@
         "Content-Type": "application/json",
       },
       credentials: "include",
-    });
-    let jsonres = await res.json();
-    if (jsonres.status!=='ok') {
-      document.getElementById("login-message").innerText = jsonres.message;
+    }).then(res=>res.json());
+    if (res.status!=='ok') {
+      document.getElementById("login-message").innerText = res.message;
     } else {
       showLoginModal.set(false);
       await updateUserProfile(dbRoot);
     }
   }
-  const escKeydown = e => {
-    if (e.code.toLowerCase() == "escape") showLoginModal.set(false);
-  }
-  onMount(()=>{
-    window.addEventListener("keydown", escKeydown);
-  });
-  onDestroy(()=>{
-    window.removeEventListener("keydown", escKeydown);
-  });
 </script>
 
-<div class="modal-container" on:click={containerExitPrompt}>
-  <div class="modal login-modal">
-    <h2>Login to Mustemmer DB</h2>
-    <form on:submit|preventDefault={loginForm}>
-      <label for="uname">Username:</label>
-      <input type="text" id="uname" name="username" placeholder="Username" />
-      <br />
-      <label for="upw">Password:</label>
-      <input type="password" id="upw" name="password" placeholder="Password" />
-      <br />
-      <button type="submit">Login</button>
-    </form>
-    <div id="login-message" />
-  </div>
-</div>
+<BaseModal modalClass="login-modal" showModal={showLoginModal}>
+  <h2>Login to Mustemmer DB</h2>
+  <form on:submit|preventDefault={loginForm}>
+    <label for="uname">Username:</label>
+    <input type="text" id="uname" name="username" placeholder="Username" />
+    <br />
+    <label for="upw">Password:</label>
+    <input type="password" id="upw" name="password" placeholder="Password" />
+    <br />
+    <button type="submit">Login</button>
+  </form>
+  <div id="login-message" />
+</BaseModal>
 
 
 <style>
-  .modal-container {
-    background-color: #57575788;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-  }
-  .modal {
-    display: inline-block;
-    background-color: var(--light-accent-2);
-    border: 2px solid var(--dark-accent-2);
-    border-radius: 10px;
-    width: 30%;
-    padding: 10px;
-    margin: 40vh auto;
-    text-align: center;
-    color: var(--light-bg-text-color);
-  }
-  .modal h2 {
-    margin-top: 0;
-  }
 </style>

@@ -42,9 +42,8 @@
           "Content-Type": "application/json",
         },
         credentials: "include",
-      })
-      let data = await res.json();
-      if (data.status === 'ok') {
+      }).then(res=>res.json());
+      if (res.status==='ok') {
         newSongs = [{}];
       };
     } else {

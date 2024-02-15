@@ -67,21 +67,20 @@
         "Content-Type": "application/json",
       },
       credentials: "include",
-    })
-    let data = await res.json();
+    }).then(res=>res.json());
     sort = null;
     sortByField = null;
-    if (data.status === 'ok') {
+    if (res.status === 'ok') {
       document.getElementById("search-error-message").innerText = '';
-      foundSongs = data.data.song;
-      foundTotal = data.data.count;
+      foundSongs = res.data.song;
+      foundTotal = res.data.count;
       if (page) {
         findPage = page;
       } else {
         findLimit = searchParams.limit ?? 50;
         findPage = searchParams.page ?? 1;
       }
-    } else document.getElementById("search-error-message").innerText = data.message;
+    } else document.getElementById("search-error-message").innerText = res.message;
   }
   function strcmp(a: string, b: string) {return +(a > b) - +(a < b)};
   function sortBy(field: string, event: Event) {

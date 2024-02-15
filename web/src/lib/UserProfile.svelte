@@ -10,19 +10,18 @@
         method: "POST",
         mode: "cors",
         credentials: "include",
-      });
-      let data = await res.json();
-      if (data.status === "ok") {
-        if (data.data.sessionValid) {
+      }).then(res=>res.json());
+      if (res.status==='ok') {
+        if (res.data.sessionValid) {
           loggedIn.set(true);
-          username = `Logged in as ${data.data.username}`;
+          username = `Logged in as ${res.data.username}`;
           return true;
         } else {
           loggedIn.set(false);
           return false;
         }
       } else {
-        console.log(data.message);
+        console.log(res.message);
         return undefined;
       }
     } else return false;
@@ -47,9 +46,8 @@
       method: "POST",
       mode: "cors",
       credentials: "include",
-    });
-    let data = await res.json();
-    if (data.status === "ok") {
+    }).then(res=>res.json());
+    if (res.status==='ok') {
       loggedIn.set(false);
       await updateUserProfile(dbRoot);
     }
